@@ -30,6 +30,6 @@ public class Scr  implements Serializable {
     @Override
     public String toString()
     {
-        return "ClassPojo [d = "+d+", t = "+t+"]";
+        return " ["+d+","+t+"]";
     }
 }

@@ -10,11 +10,14 @@ import android.widget.TextView;
 
 import com.example.nowintheather.Models.Genre;
 import com.example.nowintheather.Models.MovieShowTime;
+import com.example.nowintheather.Models.Scr;
+import com.example.nowintheather.Models.T;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.appcompat.widget.AppCompatRatingBar;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHolder> {
@@ -61,6 +64,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
         TextView rating;
         TextView description;
         ImageView poster;
+        TextView version;
+        AppCompatRatingBar itemaudianceRating;
+        AppCompatRatingBar itempressRating;
         private Context mContext;
 
         public MovieViewHolder  (View itemView) {
@@ -71,6 +77,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             rating = itemView.findViewById(R.id.rating);
             description = itemView.findViewById(R.id.description);
             poster = itemView.findViewById(R.id.poster);
+            version = itemView.findViewById(R.id.version);
+            itemaudianceRating = itemView.findViewById(R.id.itemaudianceRating);
+            itempressRating = itemView.findViewById(R.id.itempressRating);
         }
 
         public void bindMovie(MovieShowTime movieShowTime) {
@@ -83,7 +92,28 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieViewHol
             title.setText(movieShowTime.getOnShow().getMovie().getTitle());
             rating.setText(genre);
             description.setText(releaseDate);
+            version.setText(movieShowTime.getVersion().getName());
             Picasso.get().load(movieShowTime.getOnShow().getMovie().getPoster().getHref()).into(poster);
+
+            float itempressRatingFloat = 0.0f;
+            float itemuserRatingFloat = 0.0f;
+            if(movieShowTime != null && movieShowTime.getOnShow() != null && movieShowTime.getOnShow().getMovie() != null){
+                if(movieShowTime.getOnShow().getMovie().getStatistics() != null){
+                    try{
+                        itempressRatingFloat = Float.parseFloat(movieShowTime.getOnShow().getMovie().getStatistics().getPressRating());
+                    }catch (Exception e){
+
+                    }
+                    try{
+                        itemuserRatingFloat = Float.parseFloat(movieShowTime.getOnShow().getMovie().getStatistics().getUserRating());
+                    }catch (Exception e){
+
+                    }
+                }
+
+            }
+            itemaudianceRating.setRating(itempressRatingFloat);
+            itempressRating.setRating(itemuserRatingFloat);
 
         }
     }
